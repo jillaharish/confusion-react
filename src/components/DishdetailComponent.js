@@ -4,10 +4,13 @@ import { Card, CardImg, CardText, CardBody,
 import { Link } from 'react-router-dom';
 import {Button, Col, Label, Modal, ModalBody, ModalHeader, Row} from "reactstrap";
 import {Control, Errors, LocalForm} from "react-redux-form";
+import { Loading } from './LoadingComponent';
+
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
 const minLength = (len) => (val) => val && (val.length >= len);
+
 
 export class CommentComponent extends Component{
 
@@ -26,8 +29,8 @@ export class CommentComponent extends Component{
         });
     }
     handleSubmit(values) {
-        alert(JSON.stringify(values));
         this.toggleModal();
+        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
         
         // event.preventDefault();
     }
@@ -102,7 +105,7 @@ export class CommentComponent extends Component{
 
 
 
-    function RenderComments({comments, dishId}){
+    function RenderComments({comments, addComment, dishId}){
         
         if (comments){
             
@@ -123,7 +126,7 @@ export class CommentComponent extends Component{
                         {coms}
                     
                 </ul>
-                <CommentComponent dishId={dishId} />
+                <CommentComponent dishId={dishId} addComment={addComment}/>
                 </div>
             )
         } else{
@@ -154,6 +157,27 @@ export class CommentComponent extends Component{
     }
 
     const  DishDetail = (props) =>{
+
+        if (props.isLoading) {
+            return(
+                <div className="container">
+                    <div className="row">            
+                        <Loading />
+                    </div>
+                </div>
+            );
+        }
+        else if (props.errMess) {
+            return(
+                <div className="container">
+                    <div className="row">            
+                        <h4>{props.errMess}</h4>
+                    </div>
+                </div>
+            );
+        }
+        else if (props.dish != null) 
+
         if (props.dish != null){
             return(
                 <div className="container">
@@ -173,7 +197,9 @@ export class CommentComponent extends Component{
                         <RenderDish dish={props.dish} />
                     </div>
                     <div className="col-12 col-md-5 m-1">
-                        <RenderComments comments={props.comments} dishId={props.dish.id} />
+                        <RenderComments comments={props.comments}
+                         addComment={props.addComment}
+                         dishId={props.dish.id} />
                     </div>
                 </div>
                 </div>               
