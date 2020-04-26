@@ -32,7 +32,7 @@ export class CommentComponent extends Component{
     }
     handleSubmit(values) {
         this.toggleModal();
-        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+        this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
         
         // event.preventDefault();
     }
@@ -107,7 +107,7 @@ export class CommentComponent extends Component{
 
 
 
-    function RenderComments({comments, addComment, dishId}){
+    function RenderComments({comments, postComment, dishId}){
         
         if (comments){
             
@@ -128,7 +128,7 @@ export class CommentComponent extends Component{
                         {coms}
                     
                 </ul>
-                <CommentComponent dishId={dishId} addComment={addComment}/>
+                <CommentComponent dishId={dishId} postComment={postComment}/>
                 </div>
             )
         } else{
@@ -200,7 +200,7 @@ export class CommentComponent extends Component{
                     </div>
                     <div className="col-12 col-md-5 m-1">
                         <RenderComments comments={props.comments}
-                         addComment={props.addComment}
+                         postComment={props.postComment}
                          dishId={props.dish.id} />
                     </div>
                 </div>
